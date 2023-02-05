@@ -1,0 +1,11 @@
+{
+  "cookies": "",
+  "room_id": "",
+  "push": {
+    "telegram":{
+      "enable": false,
+      "group_id": "",
+      "bot_token": ""
+    }
+  }
+}
