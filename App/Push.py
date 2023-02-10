@@ -4,13 +4,18 @@
 # @Software： PyCharm
 # @GitHub: KimmyXYC
 import requests
-from App.Parameter import get_push_parameter
+from App.Parameter import get_parameter
 
 
-def telegram(info):
-    bot_token = get_push_parameter("telegram", "bot_token")
-    group_id = get_push_parameter("telegram", "group_id")
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text={info}"
+def message_push(message):
+    if get_parameter("push", "telegram", "enable"):
+        telegram(message)
+
+
+def telegram(message):
+    bot_token = get_parameter("push", "telegram", "bot_token")
+    group_id = get_parameter("push", "telegram", "group_id")
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text={message}"
     print(url)
     response = requests.get(url)
     print(response)

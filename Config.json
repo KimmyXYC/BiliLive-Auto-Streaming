@@ -1,11 +1,18 @@
 {
-  "cookies": "",
-  "room_id": "",
-  "push": {
-    "telegram":{
-      "enable": false,
-      "group_id": "",
-      "bot_token": ""
+    "user_info": {
+        "cookies": "",
+        "room_id": 0,
+        "area": 192
+    },
+    "deploy": {
+        "video_path": "video.flv",
+        "live_time": 15
+    },
+    "push": {
+        "telegram": {
+            "enable": false,
+            "group_id": "",
+            "bot_token": ""
+        }
     }
-  }
 }
