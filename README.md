@@ -1,8 +1,9 @@
 # 哔哩哔哩自动直播
 ### 使用方法
 - 安装 `Python3.7` 或更高的版本
-- 终端执行 `pip install -r requirements.txt` 安装依赖
-- 运行 `python3 login.py` 扫码登录
+- 执行 `pip install -r requirements.txt` 安装依赖
+- 执行 `python3 login.py` 扫码登录哔哩哔哩账号
+    * 从 `https://api.bilibili.com/x/web-interface/nav` 请求中获取 Cookies 填入也可行
 - 填写 `config.json` 文件
 ```config
 {
