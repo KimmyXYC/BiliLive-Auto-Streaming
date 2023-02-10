@@ -16,6 +16,8 @@ def telegram(message):
     bot_token = get_parameter("push", "telegram", "bot_token")
     group_id = get_parameter("push", "telegram", "group_id")
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text={message}"
-    print(url)
     response = requests.get(url)
-    print(response)
+    if response.status_code == 200:
+        print("【Telegram推送】成功")
+    else:
+        print("【Telegram推送】失败")

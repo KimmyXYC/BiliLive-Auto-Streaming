@@ -22,18 +22,19 @@ def start_live():
     params = {'room_id': ROOM_ID, 'area_v2': AREA, 'platform': "pc", 'csrf': CSRF}
     response = requests.post(url, headers=headers, params=params)
     json_data = response.json()
-    print(json_data)
     if json_data["code"] == 0:
         addr = json_data['data']['rtmp']['addr']
         code = json_data['data']['rtmp']['code']
-        time.sleep(3)
         print("直播已开始")
+        time.sleep(3)
+        print("开始推流")
         try:
             streaming(addr, code)
         except Exception as e:
             print(e)
     else:
         print("开播失败")
+        print(json_data)
 
 
 def stop_live():
@@ -43,11 +44,11 @@ def stop_live():
     params = {'room_id': ROOM_ID, 'csrf': CSRF}
     response = requests.post(url, headers=headers, params=params)
     json_data = response.json()
-    print(json_data)
     if json_data["code"] == 0:
         print("停播成功")
     else:
         print("停播失败")
+        print(json_data)
 
 
 def get_room_id(mid):

@@ -33,9 +33,7 @@ def get_video_length():
     """获取视频长度"""
     command = f'ffprobe -i {VIDEO_PATH} -show_entries format=duration -v quiet -of csv="p=0"'
     result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(result)
     video_length = float(result.stdout.readlines()[0])
-    print(video_length)
     return video_length
 
 
