@@ -35,7 +35,7 @@ def save_config(value, parameter):
         data = json.load(json_file)
         data["user_info"][parameter] = value
         json_file.seek(0)
-        json.dump(data, json_file, ensure_ascii=False, indent=4)
+        json.dump(data, json_file, ensure_ascii=False, indent=2)
         json_file.truncate()
 
 

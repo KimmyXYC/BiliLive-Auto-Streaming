@@ -55,9 +55,10 @@ def login():
             break
         time.sleep(1.5)
 
-    print(cookies)
+    print(f"Cookies: {cookies}")
     cookies = process_cookies(cookies)
     save_config(cookies, "cookies")
+    print("Cookies储存完成")
 
 
 if __name__ == '__main__':

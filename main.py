@@ -4,11 +4,19 @@
 # @Software： PyCharm
 # @GitHub: KimmyXYC
 import time
+import sys
+import signal
 from App.Push import message_push
 from App.Live import start_live, stop_live, get_room_id
 from App.Parameter import get_parameter, get_value
 
 MID = get_value("DedeUserID")
+
+
+def signal_handler(signal, frame):
+    print("检测到终止信号，开始停播")
+    stop_live()
+    sys.exit(0)
 
 
 def main():
@@ -31,4 +39,6 @@ def main():
 
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
     main()
