@@ -6,13 +6,26 @@
     },
     "deploy": {
         "video_path": "video.flv",
-        "live_time": 15
+        "live_time": 2100
     },
     "push": {
         "telegram": {
             "enable": false,
             "group_id": "",
-            "bot_token": ""
+            "bot_token": "",
+            "proxy": ""
+        },
+        "pushplus":{
+          "enable": false,
+          "token": ""
+        },
+        "server": {
+          "enable": false,
+          "sendkey": ""
+        },
+        "ijingniu": {
+          "enable": false,
+          "channelkey": ""
         }
     }
 }
