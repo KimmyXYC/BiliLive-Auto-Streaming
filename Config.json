@@ -1,31 +1,32 @@
 {
-    "user_info": {
-        "cookies": "",
-        "room_id": 0,
-        "area": 192
+  "user_info": {
+    "cookies": "",
+    "room_id": 0,
+    "area": 192
+  },
+  "deploy": {
+    "type": 0,
+    "video_path": "video.flv",
+    "live_time": 0
+  },
+  "push": {
+    "telegram": {
+      "enable": false,
+      "group_id": "",
+      "bot_token": "",
+      "proxy": ""
     },
-    "deploy": {
-        "video_path": "video.flv",
-        "live_time": 2100
+    "pushplus": {
+      "enable": false,
+      "token": ""
     },
-    "push": {
-        "telegram": {
-            "enable": false,
-            "group_id": "",
-            "bot_token": "",
-            "proxy": ""
-        },
-        "pushplus":{
-          "enable": false,
-          "token": ""
-        },
-        "server": {
-          "enable": false,
-          "sendkey": ""
-        },
-        "ijingniu": {
-          "enable": false,
-          "channelkey": ""
-        }
+    "server": {
+      "enable": false,
+      "sendkey": ""
+    },
+    "ijingniu": {
+      "enable": false,
+      "channelkey": ""
     }
+  }
 }
