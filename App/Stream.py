@@ -25,20 +25,12 @@ def streaming(live_addr, live_code):
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
             else:
                 start_time = time.time()
-                video_length = get_video_length()
                 end_time = start_time + LIVE_TIME
-                while time.time() + video_length < end_time:
+                while time.time() < end_time:
                     for file in files:
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
-                        if time.time() + video_length >= end_time:
+                        if time.time() >= end_time:
                             break
-                time_left = end_time - time.time()
-                if time_left > 0:
-                    cmd = f'ffmpeg -re -i {VIDEO_PATH} -c copy -f flv "{live_addr}{live_code}"'
-                    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-                    time.sleep(time_left)
-                else:
-                    pass
     else:
         if LIVE_TIME != 0 and LIVE_TIME != -1:
             start_time = time.time()
