@@ -5,6 +5,7 @@
 # @GitHub: KimmyXYC
 import requests
 import time
+from loguru import logger
 from App.Parameter import get_parameter, get_value, save_config
 from App.Stream import streaming
 
@@ -16,7 +17,6 @@ AREA = get_parameter("user_info", "area")
 
 
 def start_live():
-    """开始直播"""
     url = 'https://api.live.bilibili.com/room/v1/Room/startLive'
     headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
     params = {'room_id': ROOM_ID, 'area_v2': AREA, 'platform': "pc", 'csrf': CSRF}
@@ -25,40 +25,35 @@ def start_live():
     if json_data["code"] == 0:
         addr = json_data['data']['rtmp']['addr']
         code = json_data['data']['rtmp']['code']
-        print("直播已开始")
+        logger.success("直播已开始")
         time.sleep(3)
-        print("开始推流")
+        logger.success("开始推流")
         try:
             streaming(addr, code)
         except Exception as e:
-            print(e)
+            logger.error(f"发生错误: {e}")
     else:
-        print("开播失败")
-        print(json_data)
+        logger.error(f"开播失败, 错误码: {json_data['code']}")
 
 
 def stop_live():
-    """结束直播"""
     url = 'https://api.live.bilibili.com/room/v1/Room/stopLive'
     headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
     params = {'room_id': ROOM_ID, 'csrf': CSRF}
     response = requests.post(url, headers=headers, params=params)
     json_data = response.json()
     if json_data["code"] == 0:
-        print("停播成功")
+        logger.success("停播成功")
     else:
-        print("停播失败")
-        print(json_data)
+        logger.error(f"停播失败, 错误码: {json_data['code']}")
 
 
 def get_room_id(mid):
-    """获取room_id"""
     url = 'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld'
     headers = {'User-Agent': USER_AGENT}
     params = {'mid': mid}
     response = requests.get(url, headers=headers, params=params)
     json_data = response.json()
-    print(json_data)
     if json_data["code"] == 0:
         room_id = json_data["data"]["roomid"]
         save_config(room_id, "room_id")

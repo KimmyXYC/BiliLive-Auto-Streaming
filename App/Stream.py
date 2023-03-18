@@ -6,6 +6,7 @@
 import os
 import time
 import subprocess
+from loguru import logger
 from App.Parameter import get_parameter
 
 TYPE = get_parameter("deploy", "type")
@@ -18,16 +19,19 @@ def streaming(live_addr, live_code):
         for root, dirs, files in os.walk(TYPE):
             if LIVE_TIME == 0:
                 for file in files:
+                    logger.info(f"即将直播: {file}")
                     ffmpeg_run(live_addr, live_code, os.path.join(root, file))
             elif LIVE_TIME == -1:
                 while True:
                     for file in files:
+                        logger.info(f"即将直播: {file}")
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
             else:
                 start_time = time.time()
                 end_time = start_time + LIVE_TIME
                 while time.time() < end_time:
                     for file in files:
+                        logger.info(f"即将直播: {file}")
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
                         if time.time() >= end_time:
                             break
@@ -55,13 +59,15 @@ def streaming(live_addr, live_code):
 
 
 def get_video_length():
-    """获取视频长度"""
-    command = f'ffprobe -i {VIDEO_PATH} -show_entries format=duration -v quiet -of csv="p=0"'
-    result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    video_length = float(result.stdout.readlines()[0])
-    return video_length
+    try:
+        command = f'ffprobe -i {VIDEO_PATH} -show_entries format=duration -v quiet -of csv="p=0"'
+        result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        video_length = float(result.stdout.readlines()[0])
+        return video_length
+    except Exception as e:
+        logger.error(f"发生错误: {e}")
+        return None
 
 
 def ffmpeg_run(live_addr, live_code, video_path):
-    """推送直播流"""
     os.system(f'ffmpeg -re -i {video_path} -c copy -f flv "{live_addr}{live_code}"')
