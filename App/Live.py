@@ -23,6 +23,7 @@ def start_live():
     params = {'room_id': ROOM_ID, 'area_v2': AREA, 'platform': "pc", 'csrf': CSRF}
     response = requests.post(url, headers=headers, params=params)
     json_data = response.json()
+    logger.debug(json_data)
     if json_data["code"] == 0:
         addr = json_data['data']['rtmp']['addr']
         code = json_data['data']['rtmp']['code']
@@ -43,6 +44,7 @@ def stop_live():
     params = {'room_id': ROOM_ID, 'csrf': CSRF}
     response = requests.post(url, headers=headers, params=params)
     json_data = response.json()
+    logger.debug(json_data)
     if json_data["code"] == 0:
         logger.success("停播成功")
     else:
@@ -55,6 +57,7 @@ def get_room_id(mid):
     params = {'mid': mid}
     response = requests.get(url, headers=headers, params=params)
     json_data = response.json()
+    logger.debug(json_data)
     if json_data["code"] == 0:
         room_id = json_data["data"]["roomid"]
         save_config(room_id, "room_id")
