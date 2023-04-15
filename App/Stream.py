@@ -9,9 +9,10 @@ import subprocess
 from loguru import logger
 from App.Parameter import get_parameter
 
-TYPE = get_parameter("deploy", "type")
-VIDEO_PATH = get_parameter("deploy", "video_path")
-LIVE_TIME = get_parameter("deploy", "live_time")
+DEPLOY = get_parameter("deploy")
+TYPE = DEPLOY["type"]
+VIDEO_PATH = DEPLOY["video_path"]
+LIVE_TIME = DEPLOY["live_time"]
 
 
 def streaming(live_addr, live_code):
@@ -21,11 +22,13 @@ def streaming(live_addr, live_code):
                 for file in files:
                     logger.info(f"即将直播: {file}")
                     ffmpeg_run(live_addr, live_code, os.path.join(root, file))
+                    time.sleep(3)
             elif LIVE_TIME == -1:
                 while True:
                     for file in files:
                         logger.info(f"即将直播: {file}")
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
+                        time.sleep(3)
             else:
                 start_time = time.time()
                 end_time = start_time + LIVE_TIME
@@ -33,6 +36,7 @@ def streaming(live_addr, live_code):
                     for file in files:
                         logger.info(f"即将直播: {file}")
                         ffmpeg_run(live_addr, live_code, os.path.join(root, file))
+                        time.sleep(3)
                         if time.time() >= end_time:
                             break
     else:
@@ -56,6 +60,7 @@ def streaming(live_addr, live_code):
         else:
             while True:
                 ffmpeg_run(live_addr, live_code, VIDEO_PATH)
+                time.sleep(3)
 
 
 def get_video_length():
@@ -70,4 +75,6 @@ def get_video_length():
 
 
 def ffmpeg_run(live_addr, live_code, video_path):
-    os.system(f'ffmpeg -re -i {video_path} -c copy -f flv "{live_addr}{live_code}"')
+    cmd = f'ffmpeg -re -i {video_path} -c copy -f flv "{live_addr}{live_code}"'
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    p.wait()
