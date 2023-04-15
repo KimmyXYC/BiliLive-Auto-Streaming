@@ -5,33 +5,33 @@
 # @GitHub: KimmyXYC
 import requests
 from loguru import logger
-from App.Parameter import get_config_file
+from App.Parameter import get_parameter
 
-config_file = get_config_file()
+push_config = get_parameter("push")
 
 
 def message_push(message):
     try:
-        if config_file["push"]["telegram"]["enable"]:
+        if push_config["telegram"]["enable"]:
             telegram(message)
-        if config_file["push"]["pushplus"]["enable"]:
+        if push_config["pushplus"]["enable"]:
             pushplus(message)
-        if config_file["push"]["server"]["enable"]:
+        if push_config["server"]["enable"]:
             server(message)
-        if config_file["push"]["ijingniu"]["enable"]:
+        if push_config["ijingniu"]["enable"]:
             ijingniu(message)
     except Exception as e:
         logger.error(f"推送发生错误: {e}")
 
 
 def telegram(message):
-    bot_token = config_file["push"]["telegram"]["bot_token"]
-    group_id = config_file["push"]["telegram"]["group_id"]
+    bot_token = push_config["telegram"]["bot_token"]
+    group_id = push_config["telegram"]["group_id"]
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text={message}"
-    if config_file["push"]["telegram"]["proxy"]:
+    if push_config["telegram"]["proxy"]:
         proxies = {
-            'http': config_file["push"]["telegram"]["proxy"],
-            'https': config_file["push"]["telegram"]["proxy"]
+            'http': push_config["telegram"]["proxy"],
+            'https': push_config["telegram"]["proxy"]
         }
         response = requests.get(url, proxies=proxies)
     else:
@@ -43,7 +43,7 @@ def telegram(message):
 
 
 def pushplus(message):
-    token = config_file["push"]["pushplus"]["token"]
+    token = push_config["pushplus"]["token"]
     url = f"http://www.pushplus.plus/send/{token}?title=【BiliLive】&text={message}"
     response = requests.get(url)
     if response.status_code == 200:
@@ -53,7 +53,7 @@ def pushplus(message):
 
 
 def server(message):
-    sendkey = config_file["push"]["server"]["sendkey"]
+    sendkey = push_config["server"]["sendkey"]
     url = f"f'https://sctapi.ftqq.com/{sendkey}.send?title=【BiliLive】&desp={message}"
     response = requests.post(url)
     if response.status_code == 200:
@@ -63,7 +63,7 @@ def server(message):
 
 
 def ijingniu(message):
-    channelkey = config_file["push"]["ijingniu"]["channelkey"]
+    channelkey = push_config["ijingniu"]["channelkey"]
     url = f"f'http://push.ijingniu.cn/send?key={channelkey}&head=【BiliLive】&body={message}"
     response = requests.get(url)
     if response.status_code == 200:

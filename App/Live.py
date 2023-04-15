@@ -10,10 +10,11 @@ from App.Parameter import get_parameter, get_value, save_config
 from App.Stream import streaming
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
-COOKIES = get_parameter("user_info", "cookies")
-ROOM_ID = get_parameter("user_info", "room_id")
+USER_INFO = get_parameter("user_info")
+COOKIES = USER_INFO["cookies"]
+ROOM_ID = USER_INFO["room_id"]
 CSRF = get_value("bili_jct")
-AREA = get_parameter("user_info", "area")
+AREA = USER_INFO["area"]
 
 
 def start_live():
