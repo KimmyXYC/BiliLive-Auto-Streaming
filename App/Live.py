@@ -28,7 +28,6 @@ def start_live():
         addr = json_data['data']['rtmp']['addr']
         code = json_data['data']['rtmp']['code']
         logger.success("直播已开始")
-        time.sleep(3)
         logger.success("开始推流")
         try:
             streaming(addr, code)
