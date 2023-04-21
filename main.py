@@ -8,7 +8,7 @@ import sys
 import signal
 from loguru import logger
 from App.Push import message_push
-from App.Live import start_live, stop_live, get_room_id
+from App.Live import start_live, stop_live, get_room_id, get_live_receive
 from App.Parameter import get_parameter, get_value
 
 MID = get_value("DedeUserID")
@@ -30,6 +30,7 @@ def main():
                 logger.error(f"直播发生错误: {e}")
             time.sleep(3)
             stop_live()
+            get_live_receive()
             duration = time.time() - start_time
             logger.success(f"直播完成, 共耗时 {int(duration)} 秒")
             message_push(f"直播完成, 共耗时 {int(duration)} 秒")

@@ -50,6 +50,18 @@ def stop_live():
         logger.error(f"停播失败, 错误码: {json_data['code']}")
 
 
+def get_live_receive():
+    url = 'https://api.live.bilibili.com/xlive/anchor-task-interface/api/v1/GetAnchorTaskCenterReceiveReward'
+    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
+    response = requests.get(url, headers=headers)
+    json_data = response.json()
+    logger.debug(json_data)
+    if json_data["code"] == 0:
+        logger.success("获取奖励成功")
+    else:
+        logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
+
+
 def get_room_id(mid):
     url = 'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld'
     headers = {'User-Agent': USER_AGENT}
