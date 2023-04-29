@@ -5,6 +5,8 @@
 # @GitHub: KimmyXYC
 import json
 import re
+import urllib
+import hashlib
 from loguru import logger
 
 
@@ -62,3 +64,12 @@ def process_cookies(cookies):
     except Exception as e:
         logger.error(f"处理 Cookies 失败: {e}")
         return None
+
+
+def appsign(params, appkey, appsec):
+    params.update({'appkey': appkey})
+    params = dict(sorted(params.items()))
+    query = urllib.parse.urlencode(params)
+    sign = hashlib.md5((query + appsec).encode()).hexdigest()
+    params.update({'sign': sign})
+    return params

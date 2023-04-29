@@ -6,7 +6,7 @@
 import requests
 import time
 from loguru import logger
-from App.Parameter import get_parameter, get_value, save_config
+from App.Parameter import get_parameter, get_value, save_config, appsign
 from App.Stream import streaming
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
@@ -15,6 +15,8 @@ COOKIES = USER_INFO["cookies"]
 ROOM_ID = USER_INFO["room_id"]
 CSRF = get_value("bili_jct")
 AREA = USER_INFO["area"]
+APPKEY = "1d8b6e7d45233436"
+APPSEC = "560c52ccd288fed045859ed18bffd973"
 
 
 def start_live():
@@ -60,6 +62,20 @@ def get_live_receive():
         logger.success("获取奖励成功")
     else:
         logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
+
+
+def share_room():
+    url = 'https://api.live.bilibili.com/xlive/app-room/v1/index/shareConf'
+    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
+    params = {'room_id': ROOM_ID, 'platform': "android", 'ts': int(time.time())}
+    params = appsign(params, APPKEY, APPSEC)
+    response = requests.get(url, headers=headers, params=params)
+    json_data = response.json()
+    logger.debug(json_data)
+    if json_data["code"] == 0:
+        logger.success("分享直播间成功")
+    else:
+        logger.error(f"分享直播间失败, 错误码: {json_data['code']}")
 
 
 def get_room_id(mid):
