@@ -6,81 +6,81 @@
 import requests
 import time
 from loguru import logger
-from App.Parameter import get_parameter, get_value, save_config, appsign
+from App.Parameter import get_value, save_config, appsign
 from App.Stream import streaming
 
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
-USER_INFO = get_parameter("user_info")
-COOKIES = USER_INFO["cookies"]
-ROOM_ID = USER_INFO["room_id"]
-CSRF = get_value("bili_jct")
-AREA = USER_INFO["area"]
-APPKEY = "1d8b6e7d45233436"
-APPSEC = "560c52ccd288fed045859ed18bffd973"
 
+class BiliLive:
+    def __init__(self, cookies, area=192, room_id=None):
+        self.USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " \
+                          "Chrome/96.0.4664.110 Safari/537.36"
+        self.COOKIES = cookies
+        self.APPKEY = "1d8b6e7d45233436"
+        self.APPSEC = "560c52ccd288fed045859ed18bffd973"
+        self.ROOM_ID = room_id
+        self.AREA = area
+        self.CSRF = get_value("bili_jct", cookies)
 
-def start_live():
-    url = 'https://api.live.bilibili.com/room/v1/Room/startLive'
-    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
-    params = {'room_id': ROOM_ID, 'area_v2': AREA, 'platform': "pc", 'csrf': CSRF}
-    response = requests.post(url, headers=headers, params=params)
-    json_data = response.json()
-    logger.debug(json_data)
-    if json_data["code"] == 0:
-        addr = json_data['data']['rtmp']['addr']
-        code = json_data['data']['rtmp']['code']
-        logger.success("直播已开始")
-        logger.success("开始推流")
-        try:
-            streaming(addr, code)
-        except Exception as e:
-            logger.error(f"发生错误: {e}")
-    else:
-        logger.error(f"开播失败, 错误码: {json_data['code']}")
+    def start_live(self):
+        url = 'https://api.live.bilibili.com/room/v1/Room/startLive'
+        headers = {'User-Agent': self.USER_AGENT, 'Cookie': self.COOKIES}
+        params = {'room_id': self.ROOM_ID, 'area_v2': self.AREA, 'platform': "pc", 'csrf': self.CSRF}
+        response = requests.post(url, headers=headers, params=params)
+        json_data = response.json()
+        logger.debug(json_data)
+        if json_data["code"] == 0:
+            addr = json_data['data']['rtmp']['addr']
+            code = json_data['data']['rtmp']['code']
+            logger.success("直播已开始")
+            logger.success("开始推流")
+            try:
+                streaming(addr, code)
+            except Exception as e:
+                logger.error(f"发生错误: {e}")
+        else:
+            logger.error(f"开播失败, 错误码: {json_data['code']}")
 
+    def stop_live(self):
+        url = 'https://api.live.bilibili.com/room/v1/Room/stopLive'
+        headers = {'User-Agent': self.USER_AGENT, 'Cookie': self.COOKIES}
+        params = {'room_id': self.ROOM_ID, 'csrf': self.CSRF}
+        response = requests.post(url, headers=headers, params=params)
+        json_data = response.json()
+        logger.debug(json_data)
+        if json_data["code"] == 0:
+            logger.success("停播成功")
+        else:
+            logger.error(f"停播失败, 错误码: {json_data['code']}")
 
-def stop_live():
-    url = 'https://api.live.bilibili.com/room/v1/Room/stopLive'
-    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
-    params = {'room_id': ROOM_ID, 'csrf': CSRF}
-    response = requests.post(url, headers=headers, params=params)
-    json_data = response.json()
-    logger.debug(json_data)
-    if json_data["code"] == 0:
-        logger.success("停播成功")
-    else:
-        logger.error(f"停播失败, 错误码: {json_data['code']}")
+    def get_live_receive(self):
+        url = 'https://api.live.bilibili.com/xlive/anchor-task-interface/api/v1/GetAnchorTaskCenterReceiveReward'
+        headers = {'User-Agent': self.USER_AGENT, 'Cookie': self.COOKIES}
+        response = requests.get(url, headers=headers)
+        json_data = response.json()
+        logger.debug(json_data)
+        if json_data["code"] == 0:
+            logger.success("获取奖励成功")
+        else:
+            logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
 
-
-def get_live_receive():
-    url = 'https://api.live.bilibili.com/xlive/anchor-task-interface/api/v1/GetAnchorTaskCenterReceiveReward'
-    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
-    response = requests.get(url, headers=headers)
-    json_data = response.json()
-    logger.debug(json_data)
-    if json_data["code"] == 0:
-        logger.success("获取奖励成功")
-    else:
-        logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
-
-
-def share_room():
-    url = 'https://api.live.bilibili.com/xlive/app-room/v1/index/shareConf'
-    headers = {'User-Agent': USER_AGENT, 'Cookie': COOKIES}
-    params = {'room_id': ROOM_ID, 'platform': "android", 'ts': int(time.time())}
-    params = appsign(params, APPKEY, APPSEC)
-    response = requests.get(url, headers=headers, params=params)
-    json_data = response.json()
-    logger.debug(json_data)
-    if json_data["code"] == 0:
-        logger.success("分享直播间成功")
-    else:
-        logger.error(f"分享直播间失败, 错误码: {json_data['code']}")
+    def share_room(self):
+        url = 'https://api.live.bilibili.com/xlive/app-room/v1/index/shareConf'
+        headers = {'User-Agent': self.USER_AGENT, 'Cookie': self.COOKIES}
+        params = {'room_id': self.ROOM_ID, 'platform': "android", 'ts': int(time.time())}
+        params = appsign(params, self.APPKEY, self.APPSEC)
+        response = requests.get(url, headers=headers, params=params)
+        json_data = response.json()
+        logger.debug(json_data)
+        if json_data["code"] == 0:
+            logger.success("分享直播间成功")
+        else:
+            logger.error(f"分享直播间失败, 错误码: {json_data['code']}")
 
 
 def get_room_id(mid):
     url = 'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld'
-    headers = {'User-Agent': USER_AGENT}
+    headers = {'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                             "Chrome/96.0.4664.110 Safari/537.36"}
     params = {'mid': mid}
     response = requests.get(url, headers=headers, params=params)
     json_data = response.json()

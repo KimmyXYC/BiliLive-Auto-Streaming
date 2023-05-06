@@ -21,10 +21,9 @@ def get_parameter(*parameters):
         return None
 
 
-def get_value(value, value_item='cookies'):
+def get_value(value, values):
     try:
-        value_list = get_parameter("user_info", value_item)
-        value = re.search(r"{}=(\w+)".format(value), value_list).group(1)
+        value = re.search(r"{}=(\w+)".format(value), values).group(1)
         return value
     except Exception as e:
         logger.error(f"获取指定值失败: {e}")
