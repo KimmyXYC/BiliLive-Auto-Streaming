@@ -27,6 +27,11 @@
     "ijingniu": {
       "enable": false,
       "channelkey": ""
+    },
+    "bark": {
+      "enable": false,
+      "server": "https://api.day.app",
+      "key": ""
     }
   }
 }

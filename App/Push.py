@@ -20,6 +20,8 @@ def message_push(message):
             pusher.server()
         if push_config["ijingniu"]["enable"]:
             pusher.ijingniu()
+        if push_config["bark"]["enable"]:
+            pusher.bark()
     except Exception as e:
         logger.error(f"推送发生错误: {e}")
 
@@ -32,7 +34,7 @@ class Push:
     def telegram(self):
         bot_token = self.push_config["telegram"]["bot_token"]
         group_id = self.push_config["telegram"]["group_id"]
-        url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text={self.message}"
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id}&text=【BiliLive】{self.message}"
         if self.push_config["telegram"]["proxy"]:
             proxies = {
                 'http': self.push_config["telegram"]["proxy"],
@@ -57,7 +59,7 @@ class Push:
 
     def server(self):
         sendkey = self.push_config["server"]["sendkey"]
-        url = f"f'https://sctapi.ftqq.com/{sendkey}.send?title=【BiliLive】&desp={self.message}"
+        url = f"https://sctapi.ftqq.com/{sendkey}.send?title=【BiliLive】&desp={self.message}"
         response = requests.post(url)
         if response.status_code == 200:
             logger.success("【Server酱推送】成功")
@@ -66,9 +68,22 @@ class Push:
 
     def ijingniu(self):
         channelkey = self.push_config["ijingniu"]["channelkey"]
-        url = f"f'http://push.ijingniu.cn/send?key={channelkey}&head=【BiliLive】&body={self.message}"
+        url = f"http://push.ijingniu.cn/send?key={channelkey}&head=【BiliLive】&body={self.message}"
         response = requests.get(url)
         if response.status_code == 200:
             logger.success("【及时达推送】成功")
         else:
             logger.warning("【及时达推送】失败")
+
+    def bark(self):
+        if self.push_config["bark"]["server"]:
+            server = self.push_config["bark"]["server"]
+        else:
+            server = "https://api.day.app"
+        key = self.push_config["bark"]["key"]
+        url = f"{server}/{key}/【BiliLive】{self.message}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            logger.success("【Bark】成功")
+        else:
+            logger.warning("【Bark】失败")
