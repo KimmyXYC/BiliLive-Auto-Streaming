@@ -38,7 +38,7 @@ def main():
             streamer.get_live_receive()
             duration = time.time() - start_time
             logger.success(f"直播完成, 共耗时 {int(duration)} 秒")
-            message_push(f"直播完成, 共耗时 {int(duration)} 秒")
+            message_push(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}]直播完成, 共耗时 {int(duration)} 秒")
         else:
             logger.warning("room_id 未填写, 正在尝试自动获取……")
             if get_room_id(MID):

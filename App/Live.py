@@ -8,6 +8,7 @@ import time
 from loguru import logger
 from App.Parameter import get_value, save_config, appsign
 from App.Stream import streaming
+from App.Push import message_push
 
 
 class BiliLive:
@@ -32,8 +33,10 @@ class BiliLive:
             addr = json_data['data']['rtmp']['addr']
             code = json_data['data']['rtmp']['code']
             logger.success("直播已开始")
-            logger.success("开始推流")
+            message_push(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}]直播已开始, 3秒后开始推流")
+            time.sleep(3)
             try:
+                logger.success("开始推流")
                 streaming(addr, code)
             except Exception as e:
                 logger.error(f"发生错误: {e}")
