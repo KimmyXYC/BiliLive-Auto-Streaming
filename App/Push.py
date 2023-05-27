@@ -81,7 +81,7 @@ class Push:
         else:
             server = "https://api.day.app"
         key = self.push_config["bark"]["key"]
-        url = f"{server}/{key}/【BiliLive】{self.message}"
+        url = f"{server}/{key}/【BiliLive】/{self.message}"
         response = requests.get(url)
         if response.status_code == 200:
             logger.success("【Bark】成功")
