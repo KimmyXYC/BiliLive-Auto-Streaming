@@ -17,7 +17,7 @@ LIVE_TIME = DEPLOY["live_time"]
 
 def streaming(live_addr, live_code):
     if TYPE == 1:
-        for root, dirs, files in os.walk(TYPE):
+        for root, dirs, files in os.walk(VIDEO_PATH):
             if LIVE_TIME == 0:
                 for file in files:
                     logger.info(f"即将直播: {file}")
