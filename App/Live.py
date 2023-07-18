@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/5 19:21 
+# @Time: 2023/2/5 19:21
 # @FileName: Live.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import requests
 import time

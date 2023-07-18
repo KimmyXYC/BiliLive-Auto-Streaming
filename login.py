@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/10 19:58 
+# @Time: 2023/2/10 19:58
 # @FileName: login.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import requests
 import time

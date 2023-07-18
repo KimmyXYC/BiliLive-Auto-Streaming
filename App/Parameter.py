@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/5 19:32 
+# @Time: 2023/2/5 19:32
 # @FileName: Parameter.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import json
 import re

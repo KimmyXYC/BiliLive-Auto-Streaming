@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/5 16:44 
+# @Time: 2023/2/5 16:44
 # @FileName: main.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import time
 import sys

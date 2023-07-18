@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/5 19:46 
+# @Time: 2023/2/5 19:46
 # @FileName: Stream.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import os
 import time

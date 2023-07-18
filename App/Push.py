@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time： 2023/2/5 20:17 
+# @Time: 2023/2/5 20:17
 # @FileName: Push.py
-# @Software： PyCharm
+# @Software: PyCharm
 # @GitHub: KimmyXYC
 import requests
 from loguru import logger
