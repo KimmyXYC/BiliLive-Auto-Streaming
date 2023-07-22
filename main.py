@@ -18,7 +18,9 @@ AREA = get_parameter("user_info", "area")
 
 def signal_handler(signal, frame):
     logger.success("检测到终止信号, 开始停播")
-    BiliLive(COOKIES).stop_live()
+    room_id = get_parameter("user_info", "room_id")
+    if room_id:
+        BiliLive(COOKIES, room_id=room_id).stop_live()
     sys.exit(0)
 
 
