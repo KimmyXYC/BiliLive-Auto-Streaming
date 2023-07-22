@@ -42,6 +42,7 @@ class BiliLive:
                 logger.error(f"发生错误: {e}")
         else:
             logger.error(f"开播失败, 错误码: {json_data['code']}")
+            logger.error(json_data)
 
     def stop_live(self):
         url = 'https://api.live.bilibili.com/room/v1/Room/stopLive'
@@ -54,6 +55,7 @@ class BiliLive:
             logger.success("停播成功")
         else:
             logger.error(f"停播失败, 错误码: {json_data['code']}")
+            logger.error(json_data)
 
     def get_live_receive(self):
         url = 'https://api.live.bilibili.com/xlive/anchor-task-interface/api/v1/GetAnchorTaskCenterReceiveReward'
@@ -65,6 +67,7 @@ class BiliLive:
             logger.success("获取奖励成功")
         else:
             logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
+            logger.error(json_data)
 
     def share_room(self):
         url = 'https://api.live.bilibili.com/xlive/app-room/v1/index/shareConf'
@@ -78,6 +81,7 @@ class BiliLive:
             logger.success("分享直播间成功")
         else:
             logger.error(f"分享直播间失败, 错误码: {json_data['code']}")
+            logger.error(json_data)
 
 
 def get_room_id(mid):
