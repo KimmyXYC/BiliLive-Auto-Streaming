@@ -5,11 +5,9 @@
 # @GitHub: KimmyXYC
 import requests
 from loguru import logger
-from App.Parameter import get_parameter
 
 
-def message_push(message):
-    push_config = get_parameter("push")
+def message_push(message, push_config):
     pusher = Push(message, push_config)
     try:
         if push_config["telegram"]["enable"]:

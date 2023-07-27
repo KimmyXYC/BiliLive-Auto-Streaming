@@ -9,26 +9,27 @@ import signal
 from loguru import logger
 from App.Push import message_push
 from App.Live import BiliLive, get_room_id
-from App.Parameter import get_parameter, get_value
-
-COOKIES = get_parameter("user_info", "cookies")
-MID = get_value("DedeUserID", COOKIES)
-AREA = get_parameter("user_info", "area")
+from App.Parameter import get_value, get_config_file
 
 
 def signal_handler(signal, frame):
     logger.success("检测到终止信号, 开始停播")
-    room_id = get_parameter("user_info", "room_id")
+    config = get_config_file()
+    room_id = config["user_info"]["room_id"]
+    cookies = config["user_info"]["cookies"]
     if room_id:
-        BiliLive(COOKIES, room_id=room_id).stop_live()
+        BiliLive(cookies, room_id=room_id).stop_live()
     sys.exit(0)
 
 
 def main():
-    if get_parameter("user_info", "cookies"):
-        room_id = get_parameter("user_info", "room_id")
+    config = get_config_file()
+    if config["user_info"]["cookies"]:
+        room_id = config["user_info"]["room_id"]
+        cookies = config["user_info"]["cookies"]
+        area = config["user_info"]["area"]
         if room_id:
-            streamer = BiliLive(COOKIES, AREA, room_id)
+            streamer = BiliLive(cookies, area, room_id, config=config["deploy"])
             start_time = time.time()
             try:
                 streamer.start_live()
@@ -40,10 +41,14 @@ def main():
             streamer.get_live_receive()
             duration = time.time() - start_time
             logger.success(f"直播完成, 共耗时 {int(duration)} 秒")
-            message_push(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}]直播完成, 共耗时 {int(duration)} 秒")
+            message_push(
+                f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}]直播完成, 共耗时 {int(duration)} 秒",
+                config["push"]
+            )
         else:
             logger.warning("room_id 未填写, 正在尝试自动获取……")
-            if get_room_id(MID):
+            mid = get_value("DedeUserID", cookies)
+            if get_room_id(mid):
                 logger.success("获取成功")
                 logger.info("请重启程序以开启自动直播任务")
             else:

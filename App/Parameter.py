@@ -10,17 +10,6 @@ import hashlib
 from loguru import logger
 
 
-def get_parameter(*parameters):
-    try:
-        value = get_config_file()
-        for parameter in parameters:
-            value = value.get(parameter)
-        return value
-    except Exception as e:
-        logger.error(f"获取指定参数失败: {e}")
-        return None
-
-
 def get_value(value, values):
     try:
         value = re.search(r"{}=(\w+)".format(value), values).group(1)

@@ -12,7 +12,7 @@ from App.Push import message_push
 
 
 class BiliLive:
-    def __init__(self, cookies, area=192, room_id=None):
+    def __init__(self, cookies, area=192, room_id=None, config=None):
         self.USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " \
                           "Chrome/96.0.4664.110 Safari/537.36"
         self.COOKIES = cookies
@@ -21,6 +21,7 @@ class BiliLive:
         self.ROOM_ID = room_id
         self.AREA = area
         self.CSRF = get_value("bili_jct", cookies)
+        self.config = config
 
     def start_live(self):
         url = 'https://api.live.bilibili.com/room/v1/Room/startLive'
