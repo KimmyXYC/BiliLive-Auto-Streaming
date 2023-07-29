@@ -7,7 +7,8 @@ import requests
 import time
 import qrcode
 import io
-from App.Parameter import save_config, process_cookies
+from Utils.Parameter import process_cookies
+from Utils.Json import save_config
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
 
 
@@ -56,8 +57,7 @@ def login():
         time.sleep(1.5)
 
     print(f"Cookies: {cookies}")
-    cookies = process_cookies(cookies)
-    save_config(cookies, "cookies")
+    save_config(process_cookies(cookies), "cookies")
     print("Cookies储存完成")
 
 

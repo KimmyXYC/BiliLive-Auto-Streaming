@@ -3,11 +3,14 @@
 # @FileName: test.py.py
 # @Software： PyCharm
 # @GitHub: KimmyXYC
-from App.Push import message_push
+from App.Push import Pusher
+from Utils.Json import get_config_file
 
 
 def main():
-    message_push("这是一条测试消息")
+    config = get_config_file()
+    pusher = Pusher(push_config=config["push"])
+    pusher.push("推送测试消息")
 
 
 if __name__ == '__main__':

@@ -6,22 +6,22 @@
 import requests
 import time
 from loguru import logger
-from App.Parameter import get_value, save_config, appsign
+from Utils.Parameter import get_value, appsign
 from App.Stream import streaming
-from App.Push import message_push
 
 
 class BiliLive:
-    def __init__(self, cookies, area=192, room_id=None, config=None):
+    def __init__(self, config, pusher=None):
         self.USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " \
                           "Chrome/96.0.4664.110 Safari/537.36"
-        self.COOKIES = cookies
+        self.COOKIES = config["user_info"]["cookies"]
         self.APPKEY = "1d8b6e7d45233436"
         self.APPSEC = "560c52ccd288fed045859ed18bffd973"
-        self.ROOM_ID = room_id
-        self.AREA = area
-        self.CSRF = get_value("bili_jct", cookies)
+        self.ROOM_ID = config["user_info"]["room_id"]
+        self.AREA = config["user_info"]["area"]
+        self.CSRF = get_value("bili_jct", self.COOKIES)
         self.config = config
+        self.pusher = pusher
 
     def start_live(self):
         url = 'https://api.live.bilibili.com/room/v1/Room/startLive'
@@ -34,16 +34,16 @@ class BiliLive:
             addr = json_data['data']['rtmp']['addr']
             code = json_data['data']['rtmp']['code']
             logger.success("直播已开始")
-            message_push(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}]直播已开始, 3秒后开始推流")
+            self.pusher.push(f"直播已开始, 3秒后开始推流")
             time.sleep(3)
             try:
                 logger.success("开始推流")
-                streaming(addr, code)
+                streaming(addr, code, self.config["deploy"])
             except Exception as e:
                 logger.error(f"发生错误: {e}")
         else:
             logger.error(f"开播失败, 错误码: {json_data['code']}")
-            logger.error(json_data)
+            logger.debug(json_data)
 
     def stop_live(self):
         url = 'https://api.live.bilibili.com/room/v1/Room/stopLive'
@@ -56,7 +56,7 @@ class BiliLive:
             logger.success("停播成功")
         else:
             logger.error(f"停播失败, 错误码: {json_data['code']}")
-            logger.error(json_data)
+            logger.debug(json_data)
 
     def get_live_receive(self):
         url = 'https://api.live.bilibili.com/xlive/anchor-task-interface/api/v1/GetAnchorTaskCenterReceiveReward'
@@ -68,7 +68,7 @@ class BiliLive:
             logger.success("获取奖励成功")
         else:
             logger.error(f"获取奖励失败, 错误码: {json_data['code']}")
-            logger.error(json_data)
+            logger.debug(json_data)
 
     def share_room(self):
         url = 'https://api.live.bilibili.com/xlive/app-room/v1/index/shareConf'
@@ -82,20 +82,4 @@ class BiliLive:
             logger.success("分享直播间成功")
         else:
             logger.error(f"分享直播间失败, 错误码: {json_data['code']}")
-            logger.error(json_data)
-
-
-def get_room_id(mid):
-    url = 'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld'
-    headers = {'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                             "Chrome/96.0.4664.110 Safari/537.36"}
-    params = {'mid': mid}
-    response = requests.get(url, headers=headers, params=params)
-    json_data = response.json()
-    logger.debug(json_data)
-    if json_data["code"] == 0:
-        room_id = json_data["data"]["roomid"]
-        save_config(room_id, "room_id")
-        return True
-    else:
-        return False
+            logger.debug(json_data)
