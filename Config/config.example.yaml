@@ -1,0 +1,27 @@
+user_info:
+  cookies: "" # 哔哩哔哩账户Cookie
+  room_id: 0 # 直播间房号
+  area: 192 # 直播间分区ID
+deploy:
+  type: 0 # 路径类型，0 表示单个视频文件路径（或视频直链），1表示文件夹路径
+  video_path: "video.flv" # 视频文件路径（支持相对路径和绝对路径以及视频直链）
+  live_time: 0 # 目标直播时长（单位：秒, 0 表示播完当前视频后停止；-1 表示 24h 持续直播
+push:
+  telegram:
+    enable: false # 是否启用 Telegram 推送
+    group_id: "" # Telegram 推送群组ID
+    bot_token: "" # Telegram Bot Token
+    proxy: "" # 代理地址，支持 socks5 和 http, 留空为禁用
+  pushplus:
+    enable: false # 是否启用 PushPlus 推送
+    token: "" # PushPlus 推送密钥
+  server:
+    enable: false # 是否启用 Server酱 推送
+    sendkey: "" # Server酱 推送密钥
+  ijingniu:
+    enable: false # 是否启用 及时达 推送
+    channelkey: "" # 及时达 推送密钥
+  bark:
+    enable: false # 是否启用 Bark 推送
+    server: "https://api.day.app" # Bark 推送服务器地址
+    key: "" # Bark 推送密钥

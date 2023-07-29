@@ -8,7 +8,7 @@ import time
 import qrcode
 import io
 from Utils.Parameter import process_cookies
-from Utils.Json import save_config
+from Utils.Base import write_yaml_file
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
 
 
@@ -57,7 +57,7 @@ def login():
         time.sleep(1.5)
 
     print(f"Cookies: {cookies}")
-    save_config(process_cookies(cookies), "cookies")
+    write_yaml_file(process_cookies(cookies), "cookies")
     print("Cookies储存完成")
 
 

@@ -4,11 +4,11 @@
 # @Software： PyCharm
 # @GitHub: KimmyXYC
 from App.Push import Pusher
-from Utils.Json import get_config_file
+from Utils.Base import read_yaml_file
 
 
 def main():
-    config = get_config_file()
+    config = read_yaml_file()
     pusher = Pusher(push_config=config["push"])
     pusher.push("推送测试消息")
 

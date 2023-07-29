@@ -10,20 +10,20 @@ from loguru import logger
 from App.Push import Pusher
 from App.Live import BiliLive
 from Utils.Parameter import get_value
-from Utils.Json import get_config_file
 from Utils.Tool import get_room_id
+from Utils.Base import read_yaml_file
 
 
 def signal_handler(signal, frame):
     logger.success("检测到终止信号, 开始停播")
-    config = get_config_file()
+    config = read_yaml_file()
     if config["user_info"]["room_id"]:
         BiliLive(config).stop_live()
     sys.exit(0)
 
 
 def main():
-    config = get_config_file()
+    config = read_yaml_file()
     pusher = Pusher(push_config=config["push"])
     if not config["user_info"]["cookies"]:
         logger.error("Cookies 未填写, 无法执行直播任务")

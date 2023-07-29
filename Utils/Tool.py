@@ -5,7 +5,7 @@
 # @GitHub: KimmyXYC
 import requests
 from loguru import logger
-from Utils.Json import save_config
+from Utils.Base import write_yaml_file
 
 
 def get_room_id(mid):
@@ -18,7 +18,7 @@ def get_room_id(mid):
     logger.debug(json_data)
     if json_data["code"] == 0:
         room_id = json_data["data"]["roomid"]
-        save_config(room_id, "room_id")
+        write_yaml_file(room_id, "room_id")
         return True
     else:
         return False
