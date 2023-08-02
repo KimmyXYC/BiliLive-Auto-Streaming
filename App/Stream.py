@@ -47,7 +47,7 @@ def streaming(live_addr, live_code, config):
 
 
 def ffmpeg_run(live_addr, live_code, video_path):
-    cmd = f'ffmpeg -re -i {video_path} -c copy -f flv "{live_addr}{live_code}"'
+    cmd = f'ffmpeg -re -i {video_path} -c copy -f flv "{live_addr}{live_code}" -flvflags no_duration_filesize'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     p.wait()
     output, error = p.communicate()
