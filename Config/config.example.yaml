@@ -3,9 +3,9 @@ user_info:
   room_id: 0 # 直播间房号
   area: 192 # 直播间分区ID
 deploy:
-  type: 0 # 路径类型，0 表示单个视频文件路径（或视频直链），1表示文件夹路径
+  type: 0 # 路径类型, 0 表示单个视频文件路径（或视频直链）, 1 表示文件夹路径
   video_path: "video.flv" # 视频文件路径（支持相对路径和绝对路径以及视频直链）
-  live_time: 0 # 目标直播时长（单位：秒, 0 表示播完当前视频后停止；-1 表示 24h 持续直播
+  live_time: 0 # 目标直播时长（单位：秒, 0 表示播完当前视频后停止; -1 表示 24h 持续直播
 push:
   telegram:
     enable: false # 是否启用 Telegram 推送
